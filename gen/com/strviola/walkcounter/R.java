@@ -15,7 +15,6 @@ public final class R {
     }
     public static final class id {
         public static final int count_view=0x7f050000;
-        public static final int increment=0x7f050002;
         public static final int reset=0x7f050001;
     }
     public static final class layout {
@@ -24,7 +23,6 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f040000;
         public static final int count_view=0x7f040001;
-        public static final int inc_button=0x7f040003;
         public static final int reset_button=0x7f040002;
     }
 }

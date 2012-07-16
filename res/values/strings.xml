@@ -3,6 +3,5 @@
     <string name="app_name">WalkCounter</string>
     <string name="count_view">Not Initialized</string>
     <string name="reset_button">Reset</string>
-    <string name="inc_button">+1</string>
 
 </resources>
