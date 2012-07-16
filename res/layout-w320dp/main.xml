@@ -8,8 +8,7 @@
         android:id="@+id/count_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/count_view"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:text="@string/count_view" />
 
     <Button
         android:id="@+id/reset"
