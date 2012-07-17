@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class WalkCounterActivity extends Activity {
+	final String COUNT_KEY = "counter_value";
 	TextView count_view;
 	Button reset_button;
 	int count;
@@ -31,19 +32,35 @@ public class WalkCounterActivity extends Activity {
         
         count_view = (TextView)this.findViewById(R.id.count_view);
         reset_button = (Button)this.findViewById(R.id.reset);
-        count = 0;
         manager = (SensorManager)getSystemService(SENSOR_SERVICE);
+        
+        try {
+            count = savedInstanceState.getInt(COUNT_KEY, 0);
+        } catch (java.lang.NullPointerException e) {
+        	count = 0;
+        }
         
         man = (SensorManager)getSystemService(SENSOR_SERVICE);
         accel = man.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         accels = man.getSensorList(Sensor.TYPE_ACCELEROMETER);
-        man.registerListener(new StepListener(), accel, SensorManager.SENSOR_DELAY_UI);
+        man.registerListener(new StepCounter(), accel, SensorManager.SENSOR_DELAY_UI);
         
-        count_view.setText(String.valueOf(count) + " step(s)");
+		if (count <= 1) {
+			count_view.setText(String.valueOf(count) + " step");
+		} else {
+			count_view.setText(String.valueOf(count) + " steps");
+		}
         reset_button.setOnClickListener(new CounterReset());
     }
     
-    class StepListener implements SensorEventListener {
+    class StepCounter implements SensorEventListener {
+    	double prev = 0;
+    	double w_ave;
+    	final double ratio = 0.8;
+    	boolean flag = true;
+    	final double gate_up = 130;
+    	final double gate_down = 80;
+    	
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {
 			// pass
@@ -51,22 +68,50 @@ public class WalkCounterActivity extends Activity {
 
 		@Override
 		public void onSensorChanged(SensorEvent event) {
-			// TODO measure acceleration and count steps
-			
+			// get raw sensor data
 			final float val[] = event.values;
+
+			// acceleration vector to speed scalar
 			float accel_scalar = val[0] * val[0] + val[1] * val[1] + val[2] * val[2];
-			// acceleration to speed
-			count_view.setText("accel: " + accel_scalar);
+			
+			// calculate weighted average
+			w_ave = ratio * accel_scalar + (1 - ratio) * prev;
+			
+			// count steps
+			if (flag && w_ave > gate_up) {
+				count++;
+				if (count <= 1) {
+					count_view.setText(String.valueOf(count) + " step");
+				} else {
+					count_view.setText(String.valueOf(count) + " steps");
+				}
+				flag = false;
+			} else if (!flag && w_ave < gate_down) {
+				flag = true;
+			}
+			
+			// this is final operation
+			prev = accel_scalar;
 		}
     }
     
     class CounterReset implements OnClickListener {
 		@Override
 		public void onClick(View v) {
-			count++;
-			count_view.setText(String.valueOf(count));
 			count = 0;
-			// count_view.setText(String.valueOf(count) + " step(s)");
+			count_view.setText(String.valueOf(count) + " step");
 		}
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	super.onSaveInstanceState(outState);
+    	outState.putInt(COUNT_KEY, count);
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    	super.onRestoreInstanceState(savedInstanceState);
+    	count = savedInstanceState.getInt(COUNT_KEY);
     }
 }
