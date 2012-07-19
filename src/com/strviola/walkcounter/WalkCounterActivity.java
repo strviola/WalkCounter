@@ -36,14 +36,14 @@ public class WalkCounterActivity extends Activity {
         
         try {
             count = savedInstanceState.getInt(COUNT_KEY, 0);
-        } catch (java.lang.NullPointerException e) {
+        } catch (NullPointerException e) {
         	count = 0;
         }
         
         man = (SensorManager)getSystemService(SENSOR_SERVICE);
         accel = man.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         accels = man.getSensorList(Sensor.TYPE_ACCELEROMETER);
-        man.registerListener(new StepCounter(), accel, SensorManager.SENSOR_DELAY_UI);
+        man.registerListener(new StepCounter(), accel, SensorManager.SENSOR_DELAY_NORMAL);
         
 		if (count <= 1) {
 			count_view.setText(String.valueOf(count) + " step");
@@ -83,7 +83,8 @@ public class WalkCounterActivity extends Activity {
 				if (count <= 1) {
 					count_view.setText(String.valueOf(count) + " step");
 				} else {
-					count_view.setText(String.valueOf(count) + " steps");
+					CharSequence show = String.valueOf(count) + " steps";
+					count_view.setText(show);
 				}
 				flag = false;
 			} else if (!flag && w_ave < gate_down) {
