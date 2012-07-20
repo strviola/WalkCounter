@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">WalkCounter</string>
-    <string name="count_view">Not Initialized</string>
+    <string name="count_view">Null step</string>
     <string name="reset_button">Reset</string>
 
 </resources>

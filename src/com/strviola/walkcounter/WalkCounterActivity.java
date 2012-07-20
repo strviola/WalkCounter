@@ -34,9 +34,9 @@ public class WalkCounterActivity extends Activity {
         reset_button = (Button)this.findViewById(R.id.reset);
         manager = (SensorManager)getSystemService(SENSOR_SERVICE);
         
-        try {
+        if (savedInstanceState != null) {
             count = savedInstanceState.getInt(COUNT_KEY, 0);
-        } catch (NullPointerException e) {
+        } else {
         	count = 0;
         }
         

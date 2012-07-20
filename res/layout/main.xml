@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:text="@string/count_view"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="40dip" />
+        android:textSize="60dip" />
 
     <Button
         android:id="@+id/reset"
