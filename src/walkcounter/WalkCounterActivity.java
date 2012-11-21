@@ -1,6 +1,9 @@
-package com.strviola.walkcounter;
+package walkcounter;
+
+import com.strviola.walkcounter.R;
 
 import java.util.List;
+
 
 import android.app.Activity;
 import android.hardware.Sensor;
